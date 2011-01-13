@@ -1,0 +1,40 @@
+<h2>タイムトラッキング (<%= "#{@day} #{@user}"%>)</h2>
+<table border="1">
+  <tr>
+    <th>名前</th>
+    <th>合計(h)</th>
+    <th>プロジェクト</th>
+    <th>チケット</th>
+    <th>時間(h)</th>
+    <th>活動</th>
+    <th>コメント</th>
+    <th>記録日時</th>
+    <th>更新日時</th>
+    <th></th>
+  </tr>
+  <tr>
+      <td rowspan="<%= @time_entries.count + 1 %>"><%= link_to_user(@user) %></td>
+      <td rowspan="<%= @time_entries.count + 1 %>"><%= @time_entries.inject(0.0) {|s, t| s += t.hours} %></td>
+      <% @time_entries.each do |time_entry| %>
+        <tr>
+          <td><%= link_to_project(time_entry.project) %>
+          <td><%= link_to_issue(time_entry.issue) %>
+          <td><%= time_entry.hours %></td>
+          <td><%= time_entry.activity %></td>
+          <td><%= time_entry.comments %></td>
+          <td><%= time_entry.created_on.to_s(:db) %></td>
+          <td><%= time_entry.created_on == time_entry.updated_on ? "-" : time_entry.updated_on.to_s(:db) %></td>
+          <td align="center">
+          <% if time_entry.editable_by?(User.current) -%>
+              <%= link_to image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => time_entry, :project_id => nil},
+                                                 :title => l(:button_edit) %>
+              <%= link_to image_tag('delete.png'), {:controller => 'timelog', :action => 'destroy', :id => time_entry, :project_id => nil},
+                                                   :confirm => l(:text_are_you_sure),
+                                                   :method => :delete,
+                                                   :title => l(:button_delete) %>
+          <% end -%>
+          </td>
+        </tr>
+      <% end %>
+  </tr>
+</table>

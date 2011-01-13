@@ -1,0 +1,51 @@
+<style type="text/css">
+    .saturday {
+        background: #ccffff;
+    }
+    .sunday {
+        background: #ccffff;
+    }
+	.no-hours {
+		background: #ffcccc;
+	}
+	.not-enough {
+		background: #ffffcc;
+	}
+</style>
+
+<h2>タイムトラッキング</h2>
+<h3><%= @days.first %> ～ <%= @days.last %></h3>
+
+<% form_tag({}, :method => :get) do %>
+  <labe>from</label>
+  <input id="date_from" name="from" size="15" type="text" value="<%= params[:from] %>" />
+  <%= calendar_for('date_from') %>
+  <br />
+  <labe>to</label>
+  <input id="date_to" name="to" size="15" type="text" value="<%= params[:to] %>" />
+  <%= calendar_for('date_to') %>
+  
+  <%= param_user(@user) %>
+  
+  <%= submit_tag "表示" %>
+<% end %>
+
+<table border="1">
+  <tr>
+    <th></th>
+	<% @days.each do |day| %>
+        <th><%= day.strftime("%m/%d")%> (<%= $wdays[day.wday] %>)</th>
+	<% end %>
+  </tr>
+  <% @users.each do |user| %>
+	  <tr>
+		  <td><%= link_to_usertrack(user) %></td>
+		  <% @days.each do |day| %>
+		    <% time_entries = time_entries_by_user(user, day) %>
+			<% hours = time_entries.inject(0.0) {|s,t| s += t.hours} %>
+			<td class="<%= class_hours(day, hours) %>"><%= link_to hours, :action => :show, :user => user, :day => day %></td>
+	      <% end %>
+	  </tr>
+  <% end %>
+</table>
+
