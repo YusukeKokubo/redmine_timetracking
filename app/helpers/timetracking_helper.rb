@@ -15,7 +15,7 @@ module TimetrackingHelper
         name = h(user.name(options[:format]))
         return name unless user.active?
         
-        link_to name, :controller => 'timetracking', :action => 'user', :user => user
+        link_to name, :controller => 'timetracking', :action => 'timelog', :user => user
 	end
 	
 	def param_user(user)
