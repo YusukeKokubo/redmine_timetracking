@@ -11,6 +11,10 @@ class TimetrackingController < ApplicationController
 	  from.upto(to) do |n|
 		  @days << n
 	  end
+    unless @days.size < 10 or User.current.admin?
+      @time_entries = []
+      return
+    end
 	  
 	  @time_entries = TimeEntry.find(:all,
 									 :conditions => ["spent_on BETWEEN ? AND ?", @days.first, @days.last])
