@@ -58,3 +58,5 @@
   <% end %>
 </table>
 
+<%= link_to '1週間前', :from => @days.first - 5, :to => @days.last - 5  %>
+<%= link_to '1週間後', :from => @days.first + 5, :to => @days.last + 5  %>

@@ -58,3 +58,5 @@
 </tbody>
 </table>
 <% end %>
+
+<%= link_to 'さらに1週間さかのぼる', :user => @user, :from => @days.first - 5, :to => @days.last  %>
