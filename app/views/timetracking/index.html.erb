@@ -41,6 +41,7 @@
               <th>時間</th>
               <th>活動</th>
               <th>コメント</th>
+              <th></th>
             </tr>
             <% time_entries.each do |time_entry| %>
               <tr>
@@ -49,6 +50,14 @@
                 <td><%= time_entry.hours %></td>
                 <td><%= time_entry.activity %></td>
                 <td><%= time_entry.comments %></td>
+                <td><% if time_entry.editable_by?(User.current) -%>
+                    <%= link_to image_tag('edit.png'), {:controller => 'timelog', :action => 'edit', :id => time_entry, :project_id => nil},
+                                                       :title => l(:button_edit) %>
+                    <%= link_to image_tag('delete.png'), {:controller => 'timelog', :action => 'destroy', :id => time_entry, :project_id => nil},
+                                                         :confirm => l(:text_are_you_sure),
+                                                         :method => :delete,
+                                                         :title => l(:button_delete) %>
+                <% end -%></td>
               </tr>
             <% end %>
           </table>
