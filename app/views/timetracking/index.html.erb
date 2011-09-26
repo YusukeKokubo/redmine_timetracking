@@ -1,4 +1,7 @@
 <style type="text/css">
+  .time-entry {
+    text-align: right;
+  }
   .saturday {
     background: #ccffff;
   }
@@ -30,7 +33,7 @@
         <% time_entries = time_entries_by_user(user, day) %>
         <% hours = time_entries.inject(0.0) {|s,t| s += t.hours} %>
         <% id = "time-entry#{user.id.to_s}#{day.to_s}" %>
-        <td class="<%= class_hours(day, hours) %>">
+        <td class="time-entry <%= class_hours(day, hours) %>">
           <a href="" onclick="if ($('<%= id %>').style.display=='none' || $('<%= id %>').style.display=='') {$('<%= id %>').style.display='block';} else {$('<%= id %>').style.display='none';} return false;">
             <%= hours %>
           </a>
