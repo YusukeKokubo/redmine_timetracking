@@ -35,7 +35,7 @@
         <% id = "time-entry#{user.id.to_s}#{day.to_s}" %>
         <td class="time-entry <%= class_hours(day, hours) %>">
           <a href="" onclick="if ($('<%= id %>').style.display=='none' || $('<%= id %>').style.display=='') {$('<%= id %>').style.display='block';} else {$('<%= id %>').style.display='none';} return false;">
-            <%= hours %>
+              <%= html_hours("%.2f" % hours) if hours > 0.0 %>
           </a>
           <table id="<%= id %>" style="display:none;">
             <tr>
