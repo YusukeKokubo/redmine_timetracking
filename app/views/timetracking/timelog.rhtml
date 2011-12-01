@@ -29,14 +29,14 @@
 <th></th>
 </tr></thead>
 <tbody>
-<% @entries_by_day.keys.sort.reverse.each do |day| %>
-    <tr class="odd">
-    <td><strong><%= day == Date.today ? l(:label_today).titleize : format_date(day) %></strong></td>
-    <td colspan="2"></td>
-    <td class="hours"><em><%= html_hours("%.2f" % @entries_by_day[day].sum(&:hours).to_f) %></em></td>
-    <td></td>
-    </tr>
-    <% @entries_by_day[day].each do |entry| -%>
+<% @all_days.each do |day| %>
+  <tr class="odd">
+  <td><strong><%= day == Date.today ? l(:label_today).titleize : format_date(day) %></strong></td>
+  <td colspan="2"></td>
+  <td class="hours"><em><%= @entries_by_day[day] && html_hours("%.2f" % @entries_by_day[day].sum(&:hours).to_f) %></em></td>
+  <td></td>
+  </tr>
+  <% @entries_by_day[day] && @entries_by_day[day].each do |entry| -%>
     <tr class="time-entry" style="border-bottom: 1px solid #f5f5f5;">
     <td class="activity"><%=h entry.activity %></td>
     <td class="subject"><%=h entry.project %> <%= ' - ' + link_to_issue(entry.issue, :truncate => 50) if entry.issue %></td>
@@ -53,7 +53,20 @@
     <% end -%>
     </td>
     </tr>
-    <% end -%>
+  <% end -%>
+  <tr><td>
+  <div id="activity">
+  <% @events_by_day[day] && @events_by_day[day].each do |e| -%>
+    <dl>
+      <dt class="<%= e.event_type %> <%= User.current.logged? && e.respond_to?(:event_author) && User.current == e.event_author ? 'me' : nil %>">
+      <span class="time"><%= format_time(e.event_datetime, false) %></span>
+      <%= content_tag('span', h(e.project), :class => 'project') if @project.nil? || @project != e.project %>
+      <%= link_to format_activity_title(e.event_title), e.event_url %></dt>
+      <dd><span class="description"><%= format_activity_description(e.event_description) %></span></dd>
+    </dl>
+  <% end %>
+  </div>
+  </td></tr>
 <% end -%>
 </tbody>
 </table>

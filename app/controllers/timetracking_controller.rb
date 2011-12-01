@@ -31,11 +31,23 @@ class TimetrackingController < ApplicationController
 		  @days << n
 	  end
 	  
+    # time entries
     @entries = TimeEntry.find(:all,
 				:conditions => ["#{TimeEntry.table_name}.user_id = ? AND #{TimeEntry.table_name}.spent_on BETWEEN ? AND ?", @user.id, @days.first, @days.last],
 				:include => [:activity, :project, {:issue => [:tracker, :status]}],
 				:order => "#{TimeEntry.table_name}.spent_on DESC, #{Project.table_name}.name ASC, #{Tracker.table_name}.position ASC, #{Issue.table_name}.id ASC")
     @entries_by_day = @entries.group_by(&:spent_on)
+
+    # activities
+    @activity = Redmine::Activity::Fetcher.new(User.current, :project => nil, 
+                                                             :with_subprojects => nil, 
+                                                             :author => @user)
+    @activity.scope = :all
+
+    @events = @activity.events(from, to + 1)
+    @events_by_day = @events.group_by(&:event_date)
+
+    @all_days = (@entries_by_day.keys + @events_by_day.keys).uniq.sort.reverse
 
 	  render :action => 'timelog'
   end
