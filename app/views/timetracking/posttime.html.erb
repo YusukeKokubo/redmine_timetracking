@@ -1,4 +1,4 @@
-<h3><%= params[:date] %></h3>
+<h3><%= params[:date] %> : <%= link_to_user User.find(params[:user]) %></h3>
 
 <script type="text/javascript">
   function disp(id) {
@@ -53,6 +53,7 @@
                  :failure => "failure(request, '#{time_entry.object_id}')"
                ) do |f| %>
             <%= f.hidden_field :spent_on, :value => params[:date] %>
+            <%= f.hidden_field :user_id,  :value => params[:user] %>
             <%= f.hidden_field :issue_id, :value => issue.id %>
             <%= f.hidden_field :activity_id, :value => activity.id %>
             <%= f.text_field :hours, :size => 6, :required => true, :onfocus=>"disp('#{time_entry.object_id}');" %>

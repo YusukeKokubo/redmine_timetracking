@@ -65,7 +65,7 @@ class TimetrackingController < ApplicationController
   end
 
   def posttime
-    @issues = Issue.open.find(:all, :conditions => ["assigned_to_id = ?", User.current])
+    @issues = Issue.open.find(:all, :conditions => ["assigned_to_id = ?", params[:user]])
     @issues_by_project = @issues.group_by(&:project)
   end
 end

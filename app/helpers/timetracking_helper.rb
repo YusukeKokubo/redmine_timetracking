@@ -18,8 +18,8 @@ module TimetrackingHelper
     link_to name, :controller => 'timetracking', :action => 'timelog', :user => user
 	end
 
-  def link_to_posttime(day, date, options={})
-    link_to day, :controller => 'timetracking', :action => 'posttime', :date=> date
+  def link_to_posttime(date, user, options={})
+    link_to "", {:controller => 'timetracking', :action => 'posttime', :date => date, :user => user}, {:class => "icon icon-time-add"}
   end
 	
 	def param_user(user)

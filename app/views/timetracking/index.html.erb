@@ -23,7 +23,7 @@
   <tr>
     <th></th>
     <% @days.each do |day| %>
-      <th><%= link_to_posttime day.strftime("%m/%d"), day %> (<%= day_name(day.wday)[0..2] %>)</th>
+      <th><%= day.strftime("%m/%d")%> (<%= day_name(day.wday)[0..2] %>)</th>
     <% end %>
   </tr>
   <% @users.each do |user| %>
@@ -64,6 +64,9 @@
               </tr>
             <% end %>
           </table>
+          <% if user == User.current or User.current.admin? %>
+            <%= link_to_posttime day, user %> 
+          <% end %>
         </td>
       <% end %>
     </tr>
