@@ -1,0 +1,43 @@
+  <% issues.each do |project, issues| %>
+    <tr>
+      <td rowspan="<%= issues.size %>"><%= link_to_project project %></td>
+      <% issues.each_with_index do |issue, i| %>
+        <% if i != 0 %></tr><tr><% end %>
+        <td><%= link_to_issue issue %></td>
+        <% TimeEntryActivity.shared.active.each do |activity| %>
+          <% time_entry = TimeEntry.new %>
+          <td>
+            <% remote_form_for(:time_entry, time_entry, 
+                 :url => {
+                   :controller => 'timelog',
+                   :action => (time_entry.new_record? ? 'create' : 'update'),
+                   :id => time_entry,
+                   :project_id => project,
+                   :format => 'xml',
+                 },
+                 :update => "result#{time_entry.object_id})",
+                 :success => "success('#{time_entry.object_id}')",
+                 :failure => "failure(request, '#{time_entry.object_id}')"
+               ) do |f| %>
+            <%= f.hidden_field :spent_on, :value => params[:date] %>
+            <%= f.hidden_field :user_id,  :value => params[:user] %>
+            <%= f.hidden_field :issue_id, :value => issue.id %>
+            <%= f.hidden_field :activity_id, :value => activity.id %>
+            <%= f.text_field :hours, :size => 6, :required => true, :onfocus=>"disp('#{time_entry.object_id}');" %>
+            <div id="<%= time_entry.object_id %>" style="display:none;">
+              <div id="result<%= time_entry.object_id %>"></div>
+              <%= f.text_field :comments, :size => 10 %>
+              <% time_entry.custom_field_values.each do |value| %>
+                <%= custom_field_tag :time_entry, value %>
+              <% end %>
+              <p>
+              <%= submit_tag l(:button_save) %>
+              <a href="#" onclick="none('<%= time_entry.object_id %>');"><%=l(:button_clear)%></a>
+              </p>
+            </div>
+            </td>
+          <% end %>
+        <% end %>
+      <% end %>
+    </tr>
+  <% end %>
