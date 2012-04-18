@@ -1,5 +1,10 @@
 class TimetrackingController < ApplicationController
   unloadable
+
+  helper :issues
+  include TimelogHelper
+  helper :custom_fields
+  include CustomFieldsHelper
   
   def index
 	  @users = User.find(:all, :conditions => ["status = 1"])
@@ -57,5 +62,10 @@ class TimetrackingController < ApplicationController
 	  @day = params[:day]
 	  @time_entries = TimeEntry.find(:all,
 									 :conditions => ["spent_on = ? AND user_id = ?", @day, @user])
+  end
+
+  def posttime
+    @issues = Issue.open.find(:all, :conditions => ["assigned_to_id = ?", User.current])
+    @issues_by_project = @issues.group_by(&:project)
   end
 end

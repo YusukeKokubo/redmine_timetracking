@@ -23,7 +23,7 @@
   <tr>
     <th></th>
     <% @days.each do |day| %>
-      <th><%= day.strftime("%m/%d")%> (<%= day_name(day.wday)[0..2] %>)</th>
+      <th><%= link_to_posttime day.strftime("%m/%d"), day %> (<%= day_name(day.wday)[0..2] %>)</th>
     <% end %>
   </tr>
   <% @users.each do |user| %>
