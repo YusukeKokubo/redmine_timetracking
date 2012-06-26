@@ -7,7 +7,7 @@
         <% TimeEntryActivity.shared.active.each do |activity| %>
           <% time_entry = TimeEntry.new %>
           <td>
-            <% remote_form_for(:time_entry, time_entry, 
+            <%= remote_form_for(:time_entry, time_entry, 
                  :url => {
                    :controller => 'timelog',
                    :action => (time_entry.new_record? ? 'create' : 'update'),
