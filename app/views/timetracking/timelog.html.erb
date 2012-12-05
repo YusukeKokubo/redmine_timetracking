@@ -1,7 +1,7 @@
 <h3><%=l(:label_spent_time)%> (<%= "#{@day} #{@user}"%>)</h3>
 <h3><%= @days.first %> ～ <%= @days.last %></h3>
 
-<% form_tag({}, :method => :get) do %>
+<%= form_tag({}, :method => :get) do %>
   <label>from</label>
   <input id="date_from" name="from" size="15" type="text" value="<%= @days.first %>" />
   <%= calendar_for('date_from') %>
