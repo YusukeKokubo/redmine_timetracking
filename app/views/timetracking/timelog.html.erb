@@ -10,7 +10,7 @@
   <input id="date_to" name="to" size="15" type="text" value="<%= @days.last %>" />
   <%= calendar_for('date_to') %>
 
-  <%= param_user(@user) %>
+  <%= param_user(@user).html_safe %>
 
   <%= submit_tag "表示" %>
 <% end %>
