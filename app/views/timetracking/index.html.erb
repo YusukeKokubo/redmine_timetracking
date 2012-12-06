@@ -16,6 +16,20 @@
   }
 </style>
 
+<%= javascript_tag do %>
+$(function(){
+  $('a.show-time-entry').click(function() {
+    var id = "#time-entry-" + $(this).attr("id");
+    if ($(id).css('display')=='none' || $(id).css('display')=='') {
+      $(id).css('display', 'block');
+    } else {
+      $(id).css('display', 'none');
+    }
+    return false;
+  });
+});
+<% end %>
+
 <h2>タイムトラッキング</h2>
 <h3><%= @days.first %> ～ <%= @days.last %></h3>
 
@@ -34,10 +48,10 @@
         <% hours = time_entries.inject(0.0) {|s,t| s += t.hours} %>
         <% id = "time-entry#{user.id.to_s}#{day.to_s}" %>
         <td class="time-entry <%= class_hours(day, hours) %>">
-          <a href="" onclick="if ($('<%= id %>').style.display=='none' || $('<%= id %>').style.display=='') {$('<%= id %>').style.display='block';} else {$('<%= id %>').style.display='none';} return false;">
+          <a href="#" id = "<%= id %>" class = "show-time-entry">
               <%= html_hours("%.2f" % hours) if hours > 0.0 %>
           </a>
-          <table id="<%= id %>" style="display:none;">
+          <table id="time-entry-<%= id %>" style="display:none;">
             <tr>
               <th>プロジェクト</th>
               <th>チケット</th>
