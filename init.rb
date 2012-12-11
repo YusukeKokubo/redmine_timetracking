@@ -7,8 +7,8 @@ Redmine::Plugin.register :redmine_timetracking do
   version '0.0.1'
 
   menu :top_menu,
-	   :timetracking,
-	   {:controller => 'timetracking',
-		:action => 'index'},
-	   :caption => :timetracking
+       :timetracking,
+       {:controller => 'timetracking',
+        :action => 'index'},
+       :caption => :timetracking
 end
