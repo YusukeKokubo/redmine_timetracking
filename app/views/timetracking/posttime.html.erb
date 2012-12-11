@@ -1,27 +1,27 @@
 <h3><%= params[:date] %> : <%= link_to_user User.find(params[:user]) %></h3>
 
-<script type="text/javascript">
-  function disp(id) {
-    $(id).style.display = "";
-  }
-
-  function none(id) {
-    $(id).style.display = "none";
-  }
-
-  function success(id) {
-    none(id);
-    $(id).parentElement.parentElement.style.backgroundColor = "#DFFFDF";
-    $(id).parentElement.parentElement.style.borderColor = "#9FCF9F";
-  }
-
-  function failure(request, id) {
-    $(id).parentElement.parentElement.style.backgroundColor = "#FFE3E3";
-    $(id).parentElement.parentElement.style.borderColor = "#DD0000";
-    $("result" + id).innerHTML = request.responseText;
-  }
-
-</script>
+<%= javascript_tag do %>
+$(function(){
+  $('a.cancel_posttime').click(function() {
+    $(this).parents(".form_time_entry").css('display', 'none');
+    return false;
+  });
+  $('.input_hour').focus(function() {
+    $(this).nextAll(".form_time_entry").css('display', '');
+  });
+  $(".issue_posttime")
+    .live('ajax:success', function(data, status, xhr) {
+            $(this).find(".form_time_entry").css('display', 'none');
+            $(this).parent().css('backgroundColor', "#DFFFDF");
+            $(this).parent().css('borderColor', "#9FCF9F");
+          })
+    .live('ajax:error', function(xhr, status, error) {
+            $(this).find(".result_time_entry").html(status.responseText);
+            $(this).parent().css('backgroundColor', "#FFE3E3");
+            $(this).parent().css('borderColor', "#DD0000");
+          });
+  });
+<% end %>
 
 <table class="list issues" border="1">
   <tr>
