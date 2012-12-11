@@ -7,7 +7,8 @@
         <% TimeEntryActivity.shared.active.each do |activity| %>
           <% time_entry = TimeEntry.new %>
           <td>
-            <%= remote_form_for(:time_entry, time_entry, 
+            <%= form_for(time_entry, :as => :time_entry,
+                 :remote => true,
                  :url => {
                    :controller => 'timelog',
                    :action => (time_entry.new_record? ? 'create' : 'update'),
@@ -15,24 +16,25 @@
                    :project_id => project,
                    :format => 'xml',
                  },
-                 :update => "result#{time_entry.object_id})",
-                 :success => "success('#{time_entry.object_id}')",
-                 :failure => "failure(request, '#{time_entry.object_id}')"
+                 :html => {:class => "issue_posttime"}
                ) do |f| %>
             <%= f.hidden_field :spent_on, :value => params[:date] %>
             <%= f.hidden_field :user_id,  :value => params[:user] %>
             <%= f.hidden_field :issue_id, :value => issue.id %>
             <%= f.hidden_field :activity_id, :value => activity.id %>
-            <%= f.text_field :hours, :size => 6, :required => true, :onfocus=>"disp('#{time_entry.object_id}');" %>
-            <div id="<%= time_entry.object_id %>" style="display:none;">
-              <div id="result<%= time_entry.object_id %>"></div>
+            <%= f.text_field :hours, :size => 6, :required => true,
+                             :class => "input_hour" %>
+            <div style="display:none;" class="form_time_entry">
+              <div class="result_time_entry"></div>
               <%= f.text_field :comments, :size => 10 %>
               <% time_entry.custom_field_values.each do |value| %>
                 <%= custom_field_tag :time_entry, value %>
               <% end %>
               <p>
               <%= submit_tag l(:button_save) %>
-              <a href="#" onclick="none('<%= time_entry.object_id %>');"><%=l(:button_clear)%></a>
+              <a href="#" class="cancel_posttime">
+                <%=l(:button_clear)%>
+              </a>
               </p>
             </div>
             </td>
